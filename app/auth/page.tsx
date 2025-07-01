@@ -20,7 +20,7 @@ import { useTranslations } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
 // Константа с URL бэкенда
-const API_URL = 'http://localhost:8000' // Замените на ваш URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function AuthPage() {
   const router = useRouter()
