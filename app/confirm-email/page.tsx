@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
@@ -13,11 +13,47 @@ import { toast } from "sonner"
 const API_URL = "http://localhost:8000"
 
 export default function ConfirmEmailPage() {
+    return (
+        <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-muted/20">
+            <header className="w-full border-b bg-background/95 backdrop-blur-sm">
+                <div className="container flex h-16 items-center justify-between">
+                    <Link href="/" className="flex items-center gap-2 font-bold hover:opacity-80 transition-opacity">
+                        <ArrowLeft className="size-4" />
+                        <div className="flex items-center gap-2">
+                            <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
+                                <img src="/icon.png" alt="Megan" className="size-8" />
+                            </div>
+                            <span>Megan</span>
+                        </div>
+                    </Link>
+                </div>
+            </header>
+            <main className="flex-1 flex items-center justify-center p-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full max-w-md"
+                >
+                    <Card className="border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur shadow-xl">
+                        <CardHeader />
+                        <CardContent>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <ConfirmEmailContent />
+                            </Suspense>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            </main>
+        </div>
+    )
+}
+
+function ConfirmEmailContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const token = searchParams.get("token")
     const email = searchParams.get("email")
-
     const [status, setStatus] = useState<"pending" | "success" | "error" | "idle">("idle")
     const [error, setError] = useState<string | null>(null)
     const [resendCooldown, setResendCooldown] = useState(0)
@@ -168,34 +204,5 @@ export default function ConfirmEmailPage() {
         }
     }
 
-    return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-muted/20">
-            <header className="w-full border-b bg-background/95 backdrop-blur-sm">
-                <div className="container flex h-16 items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2 font-bold hover:opacity-80 transition-opacity">
-                        <ArrowLeft className="size-4" />
-                        <div className="flex items-center gap-2">
-                            <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-                                <img src="/icon.png" alt="Megan" className="size-8" />
-                            </div>
-                            <span>Megan</span>
-                        </div>
-                    </Link>
-                </div>
-            </header>
-            <main className="flex-1 flex items-center justify-center p-4">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="w-full max-w-md"
-                >
-                    <Card className="border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur shadow-xl">
-                        <CardHeader />
-                        <CardContent>{renderContent()}</CardContent>
-                    </Card>
-                </motion.div>
-            </main>
-        </div>
-    )
+    return renderContent()
 }

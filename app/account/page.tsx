@@ -28,11 +28,16 @@ export default function AccountPage() {
     const [copied, setCopied] = useState(false)
     const { locale } = useLanguage()
     const t = useTranslations(locale)
-    const [userData, setUserData] = useState({
-        name: localStorage.getItem('userName') || undefined,
-        email: localStorage.getItem('userEmail') || undefined,
-        avatar: localStorage.getItem('userAvatar') || undefined,
-        id: localStorage.getItem('userId') || undefined
+    const [userData, setUserData] = useState<{
+        name?: string
+        email?: string
+        avatar?: string
+        id?: string
+    }>({
+        name: undefined,
+        email: undefined,
+        avatar: undefined,
+        id: undefined
     })
     const [passwordData, setPasswordData] = useState({
         currentPassword: "",
@@ -42,10 +47,11 @@ export default function AccountPage() {
 
     useEffect(() => {
         // Fetch user data
-        const userEmail = localStorage.getItem('userEmail')
-        if (userEmail) {
-            setUserData(prev => ({ ...prev, email: userEmail }))
-        }
+        const name = typeof window !== 'undefined' ? localStorage.getItem('userName') || undefined : undefined
+        const email = typeof window !== 'undefined' ? localStorage.getItem('userEmail') || undefined : undefined
+        const avatar = typeof window !== 'undefined' ? localStorage.getItem('userAvatar') || undefined : undefined
+        const id = typeof window !== 'undefined' ? localStorage.getItem('userId') || undefined : undefined
+        setUserData({ name, email, avatar, id })
     }, [])
 
     const handlePasswordChange = async (e: React.FormEvent) => {
@@ -165,7 +171,7 @@ export default function AccountPage() {
                             <Avatar className="size-12 ring-2 ring-white dark:ring-black">
                                 <AvatarImage src={userData.avatar} />
                                 <AvatarFallback className="bg-gradient-to-br from-purple-700 to-purple-900 text-white">
-                                    {userData.name?.charAt(0) || userData.email?.charAt(0)}
+                                    {(userData.name && userData.name.charAt(0)) || (userData.email && userData.email.charAt(0)) || ''}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
@@ -240,7 +246,7 @@ export default function AccountPage() {
                                         <Avatar className="size-20 ring-4 ring-white dark:ring-black shadow-lg">
                                             <AvatarImage src={userData.avatar} />
                                             <AvatarFallback className="bg-gradient-to-br from-purple-700 to-purple-900 text-white text-xl font-semibold">
-                                                {userData.name?.charAt(0) || userData.email?.charAt(0)}
+                                                {(userData.name && userData.name.charAt(0)) || (userData.email && userData.email.charAt(0)) || ''}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1">
