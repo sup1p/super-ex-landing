@@ -354,7 +354,7 @@ export default function AuthPage() {
                           {t('rememberMe')}
                         </Label>
                       </div>
-                      <Link href="#" className="text-sm text-primary hover:underline">
+                      <Link href="#" className="text-sm text-primary hover:underline" onClick={(e) => { e.preventDefault(); router.push('/forgot-password') }}>
                         {t('forgotPassword')}
                       </Link>
                     </div>

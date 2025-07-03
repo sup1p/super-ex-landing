@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { User, Lock, Trash2, CreditCard, Users, Zap, Copy, Check, Crown, Gift, Settings, Shield } from "lucide-react"
+import { User, Lock, Trash2, CreditCard, Users, Zap, Copy, Check, Crown, Gift, Settings, Shield, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge"
 import { useLanguage } from "@/hooks/use-language"
 import { useTranslations } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { useTheme } from "next-themes"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -39,11 +40,10 @@ export default function AccountPage() {
         avatar: undefined,
         id: undefined
     })
-    const [passwordData, setPasswordData] = useState({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
-    })
+    const [cooldown, setCooldown] = useState(0)
+    const [email, setEmail] = useState<string | null>(null)
+    const { theme, setTheme } = useTheme()
+    const [mountedTheme, setMountedTheme] = useState(false)
 
     useEffect(() => {
         // Fetch user data
@@ -54,41 +54,43 @@ export default function AccountPage() {
         setUserData({ name, email, avatar, id })
     }, [])
 
-    const handlePasswordChange = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
+    useEffect(() => {
+        if (userData.email) {
+            setEmail(userData.email)
+        }
+    }, [userData.email])
 
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            toast.error("New passwords don't match")
-            setIsLoading(false)
+    useEffect(() => {
+        setMountedTheme(true)
+    }, [])
+
+    useEffect(() => {
+        if (cooldown > 0) {
+            const timer = setTimeout(() => setCooldown(cooldown - 1), 1000)
+            return () => clearTimeout(timer)
+        }
+    }, [cooldown])
+
+    const handleSendLink = async () => {
+        if (!email) {
+            toast.error("Email не найден в профиле.")
             return
         }
-
+        setIsLoading(true)
+        setCooldown(60)
         try {
-            const response = await fetch(`${API_URL}/auth/change-password`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    current_password: passwordData.currentPassword,
-                    new_password: passwordData.newPassword
-                }),
+            const response = await fetch(`${API_URL}/user/pre-change-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem('token')}` },
             })
-
             if (!response.ok) {
-                throw new Error('Failed to change password')
+                const data = await response.json()
+                throw new Error(data.detail || "Не удалось отправить ссылку")
             }
-
-            toast.success('Password changed successfully')
-            setPasswordData({
-                currentPassword: "",
-                newPassword: "",
-                confirmPassword: ""
-            })
-        } catch (error) {
-            toast.error('Failed to change password')
+            toast.success("Ссылка для смены пароля отправлена на ваш email.")
+        } catch (err: any) {
+            setCooldown(0)
+            toast.error(err.message)
         } finally {
             setIsLoading(false)
         }
@@ -141,8 +143,10 @@ export default function AccountPage() {
     }
 
     return (
-        <div className="min-h-screen flex bg-white dark:bg-black">
-            <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-br from-white via-transparent to-white dark:from-black dark:via-purple-900/20 dark:to-black"></div>
+        <div className="min-h-screen flex bg-transparent relative">
+            {/* Фон: фиолетовый градиент + клетка */}
+            <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-transparent"></div>
+            <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
 
             {/* Enhanced Sidebar */}
             <div className="w-72 border-r border-purple-200/10 dark:border-purple-900/20 bg-white/80 dark:bg-black/80 backdrop-blur-xl p-6 shadow-2xl">
@@ -154,11 +158,14 @@ export default function AccountPage() {
                         className="flex items-center gap-3 font-bold text-xl mb-8"
                     >
                         <Link href="/">
-                            <img src="/icon.png" alt="Megan" className="size-10" />
+                            <img
+                                src={theme === "light" ? "/icon-white-bg.png" : "/icon-black-bg.png"}
+                                alt="Megan"
+                                className="size-10"
+                            />
                         </Link>
                         <span className="bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-500 bg-clip-text text-transparent">Megan</span>
                     </motion.div>
-                    <LanguageSwitcher />
 
                     {/* Profile Card */}
                     <motion.div
@@ -179,6 +186,21 @@ export default function AccountPage() {
                                     {userData.name ? userData.name : t('user')}
                                 </h3>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{userData.email}</p>
+                            </div>
+                            <div className="flex flex-col gap-2 ml-2">
+                                <LanguageSwitcher />
+                                <button
+                                    type="button"
+                                    aria-label={t('toggleTheme')}
+                                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                                    className="w-10 h-10 flex items-center justify-center rounded-full border border-purple-200 dark:border-purple-800 bg-white dark:bg-black hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors"
+                                >
+                                    {mountedTheme && theme === "dark" ? (
+                                        <Sun className="size-[18px] text-yellow-400" />
+                                    ) : (
+                                        <Moon className="size-[18px] text-purple-700" />
+                                    )}
+                                </button>
                             </div>
                         </div>
                     </motion.div>
@@ -274,50 +296,13 @@ export default function AccountPage() {
                                             </div>
                                         </div>
 
-                                        <form onSubmit={handlePasswordChange} className="space-y-4">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="current-password" className="text-sm font-medium">{t('currentPassword')}</Label>
-                                                    <Input
-                                                        id="current-password"
-                                                        type="password"
-                                                        value={passwordData.currentPassword}
-                                                        onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                                                        className="h-11 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400"
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="new-password" className="text-sm font-medium">{t('newPassword')}</Label>
-                                                    <Input
-                                                        id="new-password"
-                                                        type="password"
-                                                        value={passwordData.newPassword}
-                                                        onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                                                        className="h-11 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400"
-                                                        required
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="confirm-password" className="text-sm font-medium">{t('confirmNewPassword')}</Label>
-                                                <Input
-                                                    id="confirm-password"
-                                                    type="password"
-                                                    value={passwordData.confirmPassword}
-                                                    onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                                    className="h-11 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400"
-                                                    required
-                                                />
-                                            </div>
-                                            <Button
-                                                type="submit"
-                                                disabled={isLoading}
-                                                className="h-11 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 text-white shadow-lg"
-                                            >
-                                                {isLoading ? t('updatingPassword') : t('updatePassword')}
-                                            </Button>
-                                        </form>
+                                        <Button
+                                            onClick={handleSendLink}
+                                            disabled={isLoading || cooldown > 0}
+                                            className="h-11 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 text-white shadow-lg"
+                                        >
+                                            {isLoading ? "Отправляем..." : cooldown > 0 ? `Повторить через ${cooldown}с` : "Отправить ссылку"}
+                                        </Button>
                                     </div>
 
                                     <Separator className="bg-purple-200/20 dark:bg-purple-900/30" />

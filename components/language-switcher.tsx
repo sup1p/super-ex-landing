@@ -18,7 +18,12 @@ export function LanguageSwitcher() {
 
     if (!mounted) {
         return (
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Language"
+                className="w-10 h-10 flex items-center justify-center rounded-full border border-purple-200 dark:border-purple-800 bg-white dark:bg-black hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors"
+            >
                 <Globe className="size-[18px]" />
                 <span className="sr-only">Language</span>
             </Button>
@@ -28,7 +33,12 @@ export function LanguageSwitcher() {
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Language"
+                    className="w-10 h-10 flex items-center justify-center rounded-full border border-purple-200 dark:border-purple-800 bg-white dark:bg-black hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors"
+                >
                     <Globe className="size-[18px]" />
                     <span className="sr-only">Language</span>
                 </Button>

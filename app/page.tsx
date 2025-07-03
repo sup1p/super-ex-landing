@@ -29,6 +29,7 @@ import { UserMenu } from "@/components/user-menu"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { useLanguage } from "@/hooks/use-language"
 import { useTranslations } from "@/lib/i18n"
+import { isAuthenticated } from "@/utils/auth"
 
 export default function LandingPage() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -37,6 +38,7 @@ export default function LandingPage() {
   const [mounted, setMounted] = useState(false)
   const { locale, mounted: languageMounted } = useLanguage()
   const t = useTranslations(locale)
+  const [isAuth, setIsAuth] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -50,6 +52,10 @@ export default function LandingPage() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    setIsAuth(isAuthenticated())
   }, [])
 
   const toggleTheme = () => {
@@ -198,10 +204,12 @@ export default function LandingPage() {
                 {t('heroSubtitle')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="rounded-full h-12 px-8 text-base bg-gradient-to-r from-purple-600 to-purple-1200 hover:from-purple-600 hover:to-purple-700 text-white border-none">
-                  {t('getStarted')}
-                  <ArrowRight className="ml-2 size-4" />
-                </Button>
+                <Link href={isAuth ? "/account" : "/auth"}>
+                  <Button size="lg" className="rounded-full h-12 px-8 text-base bg-gradient-to-r from-purple-600 to-purple-1200 hover:from-purple-600 hover:to-purple-700 text-white border-none">
+                    {t('getStarted')}
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </Link>
               </div>
               <div className="flex items-center justify-center gap-4 mt-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
@@ -223,17 +231,19 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative mx-auto max-w-5xl"
+              className="relative mx-auto max-w-3xl"
             >
               <div className="rounded-xl overflow-hidden shadow-2xl border border-border/40 bg-gradient-to-b from-background to-muted/20">
-                <Image
-                  src="https://cdn.dribbble.com/userupload/12302729/file/original-fa372845e394ee85bebe0389b9d86871.png?resize=1504x1128&vertical=center"
-                  width={1280}
-                  height={720}
-                  alt="Megan dashboard"
-                  className="w-full h-auto"
-                  priority
-                />
+                <div className="p-1 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-1200 transition-colors hover:from-purple-600 hover:to-purple-700">
+                  <video
+                    src="/gifex.mp4"
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                    className="w-full h-auto rounded-xl bg-background"
+                  />
+                </div>
                 <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-black/10 dark:ring-white/10"></div>
               </div>
               <div className="absolute -bottom-6 -right-6 -z-10 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 blur-3xl opacity-70"></div>
@@ -377,21 +387,21 @@ export default function LandingPage() {
                 {
                   quote:
                     "The Pro upgrade is totally worth it. It saves me at least an hour every day.",
-                  author: "Sophia Nguyen",
+                  author: "Olesya Aleksandrovna",
                   role: "Product Manager",
                   rating: 5,
                 },
                 {
                   quote:
                     "Voice assistant works pretty well, I felt myself like an Iron Man",
-                  author: "Liam Johnson",
+                  author: "Emma Rodriguez",
                   role: "Digital Marketer",
                   rating: 5,
                 },
                 {
                   quote:
                     "The interface is clean, responsive, and intuitive. Perfect for focused work.",
-                  author: "Emma Rodriguez",
+                  author: "Aitore Legend",
                   role: "UI/UX Designer",
                   rating: 5,
                 },
@@ -405,7 +415,7 @@ export default function LandingPage() {
                 {
                   quote:
                     "Install, log in, and go. Everything works inside the extension — love the simplicity.",
-                  author: "Olivia Brown",
+                  author: "Dias Otesh",
                   role: "Content Strategist",
                   rating: 5,
                 }
@@ -428,9 +438,13 @@ export default function LandingPage() {
                       </div>
                       <p className="text-lg mb-6 flex-grow">{testimonial.quote}</p>
                       <div className="flex items-center gap-4 mt-auto pt-4 border-t border-border/40">
-                        <div className="size-10 rounded-full bg-muted flex items-center justify-center text-foreground font-medium">
-                          {testimonial.author.charAt(0)}
-                        </div>
+                        <Image
+                          src={`/avatar${i + 1}.${i === 0 || i > 2 ? 'png' : 'jpeg'}`}
+                          alt={testimonial.author}
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover"
+                        />
                         <div>
                           <p className="font-medium">{testimonial.author}</p>
                           <p className="text-sm text-muted-foreground">{testimonial.role}</p>
@@ -507,14 +521,31 @@ export default function LandingPage() {
                             } bg-gradient-to-b from-background to-muted/10 backdrop-blur`}
                         >
                           {plan.popular && (
-                            <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-medium rounded-bl-lg">
-                              {t('weLoveYou')}
-                            </div>
+                            <>
+                              <div className="absolute inset-0 z-10 bg-black/60 backdrop-blur-sm" />
+                              <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                                <span className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-lg font-bold px-8 py-2 rounded-full shadow-lg opacity-90" style={{ filter: 'drop-shadow(0 2px 8px rgba(80,0,120,0.15))' }}>
+                                  Soon
+                                </span>
+                              </div>
+                              <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-medium rounded-bl-lg z-30">
+                                {t('weLoveYou')}
+                              </div>
+                            </>
                           )}
                           <CardContent className="p-6 flex flex-col h-full">
                             <h3 className="text-2xl font-bold">{plan.name}</h3>
-                            <div className="flex items-baseline mt-4">
-                              <span className="text-4xl font-bold">{plan.price}</span>
+                            <div className="flex items-baseline mt-4 relative">
+                              {plan.popular ? (
+                                <>
+                                  <span className="text-4xl font-bold line-through opacity-60">{plan.price}</span>
+                                  <span className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-purple-800 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg pointer-events-none select-none" style={{ zIndex: 2 }}>
+                                    Soon
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-4xl font-bold">{plan.price}</span>
+                              )}
                               <span className="text-muted-foreground ml-1">{t('perMonth')}</span>
                             </div>
                             <p className="text-muted-foreground mt-2">{plan.description}</p>

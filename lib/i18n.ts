@@ -22,6 +22,7 @@ export const translations = {
         reviews: 'Reviews',
         pricing: 'Pricing',
         faq: 'FAQ',
+        toggleTheme: 'Toggle theme',
 
         // Hero section
         heroTitle: 'Streamline Your Web Experience',
@@ -33,14 +34,14 @@ export const translations = {
 
         // Features
         featuresTitle: 'Everything You Need in One Extension',
-        featuresSubtitle: 'Our smart browser extension gives you the essential tools to work faster, stay organized, and focus on what matters.',
+        featuresSubtitle: 'Our smart Megan can become your personal secretary and a comfortable friend!',
         featuresBadge: 'Features',
-        feature1Title: 'Chrome Web Store Integration',
-        feature1Description: 'Install directly from the Chrome Web Store and manage everything from one place.',
-        feature2Title: 'Unique tools',
-        feature2Description: 'Work and use all types of tools that makes easy your browser surfe',
-        feature3Title: '24/7 Support',
-        feature3Description: 'Get help whenever you need it with our dedicated support team.',
+        feature1Title: 'Browser Management',
+        feature1Description: 'Our beloved Megan can search for information and navigate various resources on the internet for you.',
+        feature2Title: 'Secretary Capabilities',
+        feature2Description: "She can also save notes for you so you don't have to keep them in your mind UwU.",
+        feature3Title: 'Media and Music',
+        feature3Description: 'Megan can play and control music and videos, adjusting the volume or switching tracks as you wish.',
 
         // How it works
         howItWorksTitle: 'Simple Process, Powerful Results',
@@ -218,6 +219,7 @@ export const translations = {
         reviews: 'Отзывы',
         pricing: 'Цены',
         faq: 'FAQ',
+        toggleTheme: 'Переключить тему',
 
         // Hero section
         heroTitle: 'Оптимизируйте Ваш Веб-Опыт',
@@ -229,14 +231,14 @@ export const translations = {
 
         // Features
         featuresTitle: 'Все, Что Нужно в Одном Расширении',
-        featuresSubtitle: 'Наше умное расширение браузера дает вам необходимые инструменты для более быстрой работы, организации и концентрации на важном.',
+        featuresSubtitle: 'Наша умная Megan может стать вашим личным секретарем и комфортным другом!',
         featuresBadge: 'Возможности',
-        feature1Title: 'Интеграция с Chrome Web Store',
-        feature1Description: 'Устанавливайте напрямую из Chrome Web Store и управляйте всем из одного места.',
-        feature2Title: 'Уникальные инструменты',
-        feature2Description: 'Работайте и используйте все виды инструментов, которые упрощают ваш веб-серфинг',
-        feature3Title: 'Поддержка 24/7',
-        feature3Description: 'Получайте помощь в любое время с нашей командой поддержки.',
+        feature1Title: 'Управление браузером',
+        feature1Description: 'Наша любимая Megan может искать для вас информацию и переходить по различным ресурсам в интернете',
+        feature2Title: 'Секратарные возможности',
+        feature2Description: 'Также она может сохранять для вас заметки чтобы вы не забивали себе этим голову UwU',
+        feature3Title: 'Медиа и Музыка',
+        feature3Description: 'Megan умеет включать и управлять музыкой и видео, делая ее то меньше то громче, то включая другую музыку.',
 
         // How it works
         howItWorksTitle: 'Простой Процесс, Мощные Результаты',
