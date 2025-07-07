@@ -46,6 +46,14 @@ export default function AccountPage() {
     const [mountedTheme, setMountedTheme] = useState(false)
 
     useEffect(() => {
+        // Проверка токена
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                router.replace('/auth')
+                return
+            }
+        }
         // Fetch user data
         const name = typeof window !== 'undefined' ? localStorage.getItem('userName') || undefined : undefined
         const email = typeof window !== 'undefined' ? localStorage.getItem('userEmail') || undefined : undefined
