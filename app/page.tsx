@@ -462,11 +462,10 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing Section */}
-        <section id="pricing" className="w-full py-20 md:py-32 bg-muted/30 relative overflow-hidden">
+        <section id="pricing" className="w-full py-12 md:py-32 relative overflow-hidden">
           <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-transparent"></div>
           <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-
-          <div className="container px-4 md:px-6 relative">
+          <div className="container px-2 md:px-6 relative">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -485,7 +484,7 @@ export default function LandingPage() {
 
             <div className="mx-auto max-w-5xl">
               <Tabs defaultValue="monthly" className="w-full">
-                <div className="flex justify-center mb-8">
+                <div className="flex flex-col md:flex-row justify-center items-center gap-8">
                   <TabsList className="rounded-full p-1">
                     <TabsTrigger value="monthly" className="rounded-full px-6">
                       {t('monthly')}
@@ -493,7 +492,7 @@ export default function LandingPage() {
                   </TabsList>
                 </div>
                 <TabsContent value="monthly">
-                  <div className="flex justify-center gap-8">
+                  <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-4 md:gap-8">
                     {[
                       {
                         name: t('free'),
@@ -517,7 +516,7 @@ export default function LandingPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: i * 0.1 }}
-                        className="w-[320px]"
+                        className="w-[320px] md:w-full mx-auto"
                       >
                         <Card
                           className={`relative overflow-hidden h-full ${plan.popular ? "border-primary shadow-lg" : "border-border/40 shadow-md"

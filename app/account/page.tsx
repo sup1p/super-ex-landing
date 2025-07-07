@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { User, Lock, Trash2, CreditCard, Users, Zap, Copy, Check, Crown, Gift, Settings, Shield, Moon, Sun } from "lucide-react"
+import { User, Lock, Trash2, CreditCard, Users, Zap, Copy, Check, Crown, Gift, Settings, Shield, Moon, Sun, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -44,6 +44,7 @@ export default function AccountPage() {
     const [email, setEmail] = useState<string | null>(null)
     const { theme, setTheme } = useTheme()
     const [mountedTheme, setMountedTheme] = useState(false)
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
     useEffect(() => {
         // Проверка токена
@@ -151,14 +152,40 @@ export default function AccountPage() {
     }
 
     return (
-        <div className="min-h-screen flex bg-transparent relative">
+        <div className="min-h-screen flex flex-col md:flex-row bg-transparent relative">
+            {/* Mobile Sidebar Toggle */}
+            <button
+                className="md:hidden fixed top-4 left-4 z-30 p-2 rounded-lg bg-white/80 dark:bg-black/80 border border-purple-200/20 dark:border-purple-900/30 shadow-lg"
+                onClick={() => setSidebarOpen(true)}
+                aria-label="Open sidebar"
+            >
+                <Menu className="size-6 text-purple-700 dark:text-purple-300" />
+            </button>
             {/* Фон: фиолетовый градиент + клетка */}
             <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-transparent"></div>
             <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
 
-            {/* Enhanced Sidebar */}
-            <div className="w-72 border-r border-purple-200/10 dark:border-purple-900/20 bg-white/80 dark:bg-black/80 backdrop-blur-xl p-6 shadow-2xl">
-                <div className="space-y-6">
+            {/* Sidebar (mobile: drawer, desktop: static) */}
+            {/* Overlay for mobile */}
+            {sidebarOpen && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/40 md:hidden"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+            <div
+                className={`fixed md:static z-50 top-0 left-0 h-full md:h-auto w-4/5 max-w-xs md:w-72 border-r border-purple-200/10 dark:border-purple-900/20 bg-white dark:bg-black backdrop-blur-xl p-6 shadow-2xl transition-transform duration-300 md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+                style={{ minHeight: '100vh' }}
+            >
+                {/* Close button for mobile */}
+                <button
+                    className="md:hidden absolute top-4 right-4 p-2 rounded-lg bg-white/80 dark:bg-black/80 border border-purple-200/20 dark:border-purple-900/30 shadow"
+                    onClick={() => setSidebarOpen(false)}
+                    aria-label="Close sidebar"
+                >
+                    <span className="text-lg">×</span>
+                </button>
+                <div className="space-y-6 mt-10 md:mt-0">
                     {/* Logo Section */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
@@ -244,16 +271,15 @@ export default function AccountPage() {
                     </Tabs>
                 </div>
             </div>
-
             {/* Main Content */}
-            <main className="flex-1 p-8 overflow-y-auto">
+            <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto max-w-full w-full">
                 <motion.div
                     key={activeTab}
                     variants={tabVariants}
                     initial="hidden"
                     animate="visible"
                     transition={{ duration: 0.3 }}
-                    className="max-w-4xl mx-auto"
+                    className="max-w-4xl mx-auto w-full"
                 >
                     {activeTab === "account" && (
                         <div className="space-y-6">
