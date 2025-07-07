@@ -467,11 +467,11 @@ export default function AuthPage() {
                       <input id="terms" type="checkbox" className="rounded border-border" required />
                       <Label htmlFor="terms" className="text-sm">
                         {t('iAgreeTo')}{" "}
-                        <Link href="#" className="text-primary hover:underline">
+                        <Link href="/terms" className="text-primary hover:underline">
                           {t('termsOfService')}
                         </Link>{" "}
                         {t('and')}{" "}
-                        <Link href="#" className="text-primary hover:underline">
+                        <Link href="/privacy" className="text-primary hover:underline">
                           {t('privacyPolicy')}
                         </Link>
                       </Label>

@@ -211,7 +211,9 @@ export const translations = {
         daysFree: 'days free',
         monthFree: 'month free',
         lifetimePro: 'Lifetime Pro',
-        user: 'User'
+        user: 'User',
+        myAccount: "My Account",
+        logout: "Logout"
     },
     ru: {
         // Navigation
@@ -408,7 +410,9 @@ export const translations = {
         daysFree: 'дней бесплатно',
         monthFree: 'месяц бесплатно',
         lifetimePro: 'Pro навсегда',
-        user: 'Пользователь'
+        user: 'Пользователь',
+        myAccount: "Мой аккаунт",
+        logout: "Выйти"
     }
 } as const
 
