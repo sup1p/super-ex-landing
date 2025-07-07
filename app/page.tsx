@@ -658,7 +658,7 @@ export default function LandingPage() {
               <div className="flex items-center gap-2 font-bold">
                 {mounted && (
                   <Image
-                    src={theme === "dark" ? "/icon-white-bg.png" : "/icon-black-bg.png"}
+                    src={theme === "light" ? "/icon-white-bg.png" : "/icon-black-bg.png"}
                     alt="Megan"
                     width={32}
                     height={32}
