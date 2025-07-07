@@ -9,10 +9,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { useLanguage } from "@/hooks/use-language"
+import { useTranslations } from "@/lib/i18n"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function ForgotPasswordPage() {
+    const { locale } = useLanguage();
+    const t = useTranslations(locale);
     const router = useRouter()
     const [email, setEmail] = useState("")
     const [status, setStatus] = useState<"idle" | "pending" | "success" | "error">("idle")
@@ -42,10 +46,10 @@ export default function ForgotPasswordPage() {
             })
             if (!response.ok) {
                 const data = await response.json()
-                throw new Error(data.detail || "Не удалось отправить письмо")
+                throw new Error(data.detail || t('forgotPasswordErrorDesc'))
             }
             setStatus("success")
-            toast.success("Письмо для смены пароля отправлено. Проверьте почту.")
+            toast.success(t('forgotPasswordSentDesc'))
         } catch (err: any) {
             setStatus("error")
             setError(err.message)
@@ -62,7 +66,7 @@ export default function ForgotPasswordPage() {
                 <div className="container flex h-16 items-center justify-between">
                     <Link href="/auth" className="flex items-center gap-2 font-bold hover:opacity-80 transition-opacity">
                         <ArrowLeft className="size-4" />
-                        <span>Назад к входу</span>
+                        <span>{t('forgotPasswordBack')}</span>
                     </Link>
                 </div>
             </header>
@@ -75,25 +79,25 @@ export default function ForgotPasswordPage() {
                 >
                     <Card className="border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur shadow-xl">
                         <CardHeader>
-                            <CardTitle>Восстановление пароля</CardTitle>
-                            <CardDescription>Введите ваш email, чтобы получить ссылку для смены пароля.</CardDescription>
+                            <CardTitle>{t('forgotPasswordTitle')}</CardTitle>
+                            <CardDescription>{t('forgotPasswordDesc')}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {status === "success" ? (
                                 <div className="flex flex-col items-center gap-4 text-center">
                                     <CheckCircle className="size-12 text-green-500" />
-                                    <CardTitle>Письмо отправлено!</CardTitle>
+                                    <CardTitle>{t('forgotPasswordSentTitle')}</CardTitle>
                                     <CardDescription>
-                                        Проверьте вашу почту и следуйте инструкции для смены пароля.
+                                        {t('forgotPasswordSentDesc')}
                                     </CardDescription>
-                                    <Button onClick={() => router.push("/auth")}>Назад к входу</Button>
+                                    <Button onClick={() => router.push("/auth")}>{t('forgotPasswordSentButton')}</Button>
                                 </div>
                             ) : status === "error" ? (
                                 <div className="flex flex-col items-center gap-4 text-center">
                                     <AlertTriangle className="size-12 text-red-500" />
-                                    <CardTitle>Ошибка</CardTitle>
-                                    <CardDescription>{error || "Не удалось отправить письмо."}</CardDescription>
-                                    <Button onClick={() => setStatus("idle")}>Попробовать снова</Button>
+                                    <CardTitle>{t('forgotPasswordErrorTitle')}</CardTitle>
+                                    <CardDescription>{error || t('forgotPasswordErrorDesc')}</CardDescription>
+                                    <Button onClick={() => setStatus("idle")}>{t('forgotPasswordErrorRetry')}</Button>
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -101,7 +105,7 @@ export default function ForgotPasswordPage() {
                                         <Mail className="size-12 text-primary" />
                                         <Input
                                             type="email"
-                                            placeholder="Ваш email"
+                                            placeholder={t('forgotPasswordFormPlaceholder')}
                                             value={email}
                                             onChange={e => setEmail(e.target.value)}
                                             required
@@ -109,7 +113,11 @@ export default function ForgotPasswordPage() {
                                         />
                                     </div>
                                     <Button type="submit" disabled={isLoading || cooldown > 0} className="w-full">
-                                        {isLoading ? "Отправляем..." : cooldown > 0 ? `Повторить через ${cooldown}с` : "Отправить ссылку"}
+                                        {isLoading
+                                            ? t('forgotPasswordFormSending')
+                                            : cooldown > 0
+                                                ? t('forgotPasswordFormResendWait').replace('{seconds}', cooldown.toString())
+                                                : t('forgotPasswordFormButton')}
                                     </Button>
                                 </form>
                             )}

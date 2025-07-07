@@ -10,10 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { useLanguage } from "@/hooks/use-language"
+import { useTranslations } from "@/lib/i18n"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function ConfirmPasswordPage() {
+    const { locale } = useLanguage();
+    const t = useTranslations(locale);
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-muted/20">
             <header className="w-full border-b bg-background/95 backdrop-blur-sm">
@@ -40,7 +44,7 @@ export default function ConfirmPasswordPage() {
                         <CardHeader />
                         <CardContent>
                             <Suspense fallback={<div>Loading...</div>}>
-                                <ConfirmPasswordContent />
+                                <ConfirmPasswordContent t={t} />
                             </Suspense>
                         </CardContent>
                     </Card>
@@ -50,7 +54,7 @@ export default function ConfirmPasswordPage() {
     )
 }
 
-function ConfirmPasswordContent() {
+function ConfirmPasswordContent({ t }: { t: ReturnType<typeof useTranslations> }) {
     const router = useRouter()
     const searchParams = useSearchParams()
     const token = searchParams.get("token")
@@ -73,7 +77,7 @@ function ConfirmPasswordContent() {
     // 3. Handle resend email action
     const handleResend = async () => {
         if (!email) {
-            toast.error("Адрес электронной почты не найден.")
+            toast.error(t('passwordChangeEmailNotFound'))
             return
         }
         setIsLoading(true)
@@ -87,9 +91,9 @@ function ConfirmPasswordContent() {
             })
             if (!response.ok) {
                 const data = await response.json()
-                throw new Error(data.detail || "Не удалось отправить письмо повторно")
+                throw new Error(data.detail || t('passwordChangeResendError'))
             }
-            toast.success("Письмо для смены пароля отправлено повторно.")
+            toast.success(t('passwordChangeResendSuccess'))
         } catch (err: any) {
             setError(err.message)
             toast.error(err.message)
@@ -104,7 +108,7 @@ function ConfirmPasswordContent() {
         e.preventDefault()
         if (!token) return
         if (newPassword !== confirmPassword) {
-            toast.error("Пароли не совпадают")
+            toast.error(t('passwordChangeMismatch'))
             return
         }
         setIsLoading(true)
@@ -117,10 +121,10 @@ function ConfirmPasswordContent() {
             })
             if (!response.ok) {
                 const data = await response.json()
-                throw new Error(data.detail || "Не удалось сменить пароль")
+                throw new Error(data.detail || t('passwordChangeFailed'))
             }
             setStatus("success")
-            toast.success("Пароль успешно изменён! Теперь вы можете войти в систему.")
+            toast.success(t('passwordChangeSuccessDesc'))
             setTimeout(() => router.push("/auth"), 3000)
         } catch (err: any) {
             setError(err.message)
@@ -138,11 +142,11 @@ function ConfirmPasswordContent() {
                     return (
                         <form onSubmit={handleChangePassword} className="flex flex-col items-center gap-4 text-center">
                             <Lock className="size-12 text-primary" />
-                            <CardTitle>Смена пароля</CardTitle>
-                            <CardDescription>Введите новый пароль для вашего аккаунта.</CardDescription>
+                            <CardTitle>{t('passwordChangeTitle')}</CardTitle>
+                            <CardDescription>{t('passwordChangeDesc')}</CardDescription>
                             <Input
                                 type="password"
-                                placeholder="Новый пароль"
+                                placeholder={t('passwordNewPlaceholder')}
                                 value={newPassword}
                                 onChange={e => setNewPassword(e.target.value)}
                                 className="w-full"
@@ -150,14 +154,14 @@ function ConfirmPasswordContent() {
                             />
                             <Input
                                 type="password"
-                                placeholder="Повторите новый пароль"
+                                placeholder={t('passwordRepeatPlaceholder')}
                                 value={confirmPassword}
                                 onChange={e => setConfirmPassword(e.target.value)}
                                 className="w-full"
                                 required
                             />
                             <Button type="submit" disabled={isLoading} className="w-full">
-                                {isLoading ? "Сохраняем..." : "Сменить пароль"}
+                                {isLoading ? t('passwordChangeSaving') : t('passwordChangeButton')}
                             </Button>
                             {error && <p className="text-sm text-red-500">{error}</p>}
                         </form>
@@ -166,25 +170,25 @@ function ConfirmPasswordContent() {
                     return (
                         <div className="flex flex-col items-center gap-4 text-center">
                             <CheckCircle className="size-12 text-green-500" />
-                            <CardTitle>Пароль изменён!</CardTitle>
+                            <CardTitle>{t('passwordChangeSuccessTitle')}</CardTitle>
                             <CardDescription>
-                                Ваш пароль успешно изменён. Вы будете перенаправлены на страницу входа через несколько секунд.
+                                {t('passwordChangeSuccessDesc')}
                             </CardDescription>
-                            <Button onClick={() => router.push("/auth")}>Перейти к входу</Button>
+                            <Button onClick={() => router.push("/auth")}>{t('passwordChangeSuccessButton')}</Button>
                         </div>
                     )
                 case "error":
                     return (
                         <div className="flex flex-col items-center gap-4 text-center">
                             <AlertTriangle className="size-12 text-red-500" />
-                            <CardTitle>Ошибка</CardTitle>
+                            <CardTitle>{t('passwordChangeErrorTitle')}</CardTitle>
                             <CardDescription>
-                                {error || "Ссылка недействительна или срок её действия истёк."}
+                                {error || t('passwordChangeErrorDesc')}
                             </CardDescription>
                             <div className="flex gap-2">
-                                <Button variant="outline" onClick={() => router.push("/auth")}>Назад к входу</Button>
+                                <Button variant="outline" onClick={() => router.push("/auth")}>{t('passwordChangeErrorBack')}</Button>
                                 {email && (
-                                    <Button onClick={() => setStatus("idle")}>Запросить новую ссылку</Button>
+                                    <Button onClick={() => setStatus("idle")}>{t('passwordChangeErrorRequest')}</Button>
                                 )}
                             </div>
                         </div>
@@ -196,17 +200,16 @@ function ConfirmPasswordContent() {
             return (
                 <div className="flex flex-col items-center gap-4 text-center">
                     <Mail className="size-12 text-primary" />
-                    <CardTitle>Смена пароля</CardTitle>
+                    <CardTitle>{t('passwordChangeSentTitle')}</CardTitle>
                     <CardDescription>
-                        Мы отправили ссылку для смены пароля на <strong>{email || "ваш адрес электронной почты"}</strong>.
-                        Пожалуйста, проверьте свою почту и перейдите по ссылке для завершения смены пароля.
+                        {t('passwordChangeSentDesc').replace('{email}', email || t('email'))}
                     </CardDescription>
                     <Button onClick={handleResend} disabled={resendCooldown > 0 || isLoading} className="w-full">
                         {isLoading
-                            ? "Отправляем..."
+                            ? t('passwordChangeSentSending')
                             : resendCooldown > 0
-                                ? `Повторить через ${resendCooldown}с`
-                                : "Отправить письмо повторно"}
+                                ? t('passwordChangeSentResendWait').replace('{seconds}', resendCooldown.toString())
+                                : t('passwordChangeSentResend')}
                     </Button>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                 </div>

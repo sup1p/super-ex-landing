@@ -9,10 +9,14 @@ import { ArrowLeft, CheckCircle, Mail, AlertTriangle, Clock } from "lucide-react
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { toast } from "sonner"
+import { useLanguage } from "@/hooks/use-language"
+import { useTranslations } from "@/lib/i18n"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function ConfirmEmailPage() {
+    const { locale } = useLanguage();
+    const t = useTranslations(locale);
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-muted/20">
             <header className="w-full border-b bg-background/95 backdrop-blur-sm">
@@ -39,7 +43,7 @@ export default function ConfirmEmailPage() {
                         <CardHeader />
                         <CardContent>
                             <Suspense fallback={<div>Loading...</div>}>
-                                <ConfirmEmailContent />
+                                <ConfirmEmailContent t={t} />
                             </Suspense>
                         </CardContent>
                     </Card>
@@ -49,7 +53,7 @@ export default function ConfirmEmailPage() {
     )
 }
 
-function ConfirmEmailContent() {
+function ConfirmEmailContent({ t }: { t: ReturnType<typeof useTranslations> }) {
     const router = useRouter()
     const searchParams = useSearchParams()
     const token = searchParams.get("token")
@@ -68,35 +72,29 @@ function ConfirmEmailContent() {
                     const data = await res.json()
 
                     if (!res.ok) {
-                        // Проверяем, если пользователь уже существует или аккаунт уже подтвержден
                         if (data.detail?.includes("already exists") ||
                             data.detail?.includes("already confirmed") ||
                             data.detail?.includes("уже существует") ||
                             data.detail?.includes("уже подтвержден") ||
                             res.status === 400) {
-                            // Считаем это успехом, так как цель достигнута
                             setStatus("success")
-                            toast.success("Ваш аккаунт уже подтвержден! Вы можете войти в систему.")
+                            toast.success(t('confirmEmailSuccessDesc'))
                             setTimeout(() => router.push("/auth"), 3000)
                             return
                         }
-
-                        throw new Error(data.detail || "Подтверждение не удалось")
+                        throw new Error(data.detail || t('confirmEmailErrorDesc'))
                     }
-
-                    // Успешное подтверждение
                     setStatus("success")
-                    toast.success("Email успешно подтвержден! Теперь вы можете войти в систему.")
+                    toast.success(t('confirmEmailSuccessDesc'))
                     setTimeout(() => router.push("/auth"), 3000)
                 })
                 .catch(err => {
-                    // Только для реальных ошибок
                     setError(err.message)
                     setStatus("error")
                     toast.error(err.message)
                 })
         }
-    }, [token, router])
+    }, [token, router, t])
 
     // 2. Handle resend cooldown timer
     useEffect(() => {
@@ -109,29 +107,27 @@ function ConfirmEmailContent() {
     // 3. Handle resend email action
     const handleResend = async () => {
         if (!email) {
-            toast.error("Адрес электронной почты не найден.")
+            toast.error(t('confirmEmailEmailNotFound'))
             return
         }
         setIsLoading(true)
         setError(null)
         setResendCooldown(90)
-
         try {
             const response = await fetch(`${API_URL}/auth/resend`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
             });
-
             if (!response.ok) {
                 const data = await response.json()
-                throw new Error(data.detail || "Не удалось отправить письмо повторно")
+                throw new Error(data.detail || t('confirmEmailResendError'))
             }
-            toast.success("Письмо с подтверждением отправлено повторно.")
+            toast.success(t('confirmEmailResendSuccess'))
         } catch (err: any) {
             setError(err.message)
             toast.error(err.message)
-            setResendCooldown(0) // Reset cooldown on error
+            setResendCooldown(0)
         } finally {
             setIsLoading(false)
         }
@@ -144,37 +140,33 @@ function ConfirmEmailContent() {
                     return (
                         <div className="flex flex-col items-center gap-4">
                             <Clock className="size-12 text-primary animate-spin" />
-                            <CardTitle>Подтверждаем ваш email...</CardTitle>
-                            <CardDescription>Пожалуйста, подождите, пока мы проверяем ваш токен.</CardDescription>
+                            <CardTitle>{t('confirmEmailPendingTitle')}</CardTitle>
+                            <CardDescription>{t('confirmEmailPendingDesc')}</CardDescription>
                         </div>
                     )
                 case "success":
                     return (
                         <div className="flex flex-col items-center gap-4 text-center">
                             <CheckCircle className="size-12 text-green-500" />
-                            <CardTitle>Email подтвержден!</CardTitle>
+                            <CardTitle>{t('confirmEmailSuccessTitle')}</CardTitle>
                             <CardDescription>
-                                Ваш аккаунт успешно подтвержден. Вы будете перенаправлены на страницу входа через несколько секунд.
+                                {t('confirmEmailSuccessDesc')}
                             </CardDescription>
-                            <Button onClick={() => router.push("/auth")}>Перейти к входу</Button>
+                            <Button onClick={() => router.push("/auth")}>{t('confirmEmailSuccessButton')}</Button>
                         </div>
                     )
                 case "error":
                     return (
                         <div className="flex flex-col items-center gap-4 text-center">
                             <AlertTriangle className="size-12 text-red-500" />
-                            <CardTitle>Ошибка подтверждения</CardTitle>
+                            <CardTitle>{t('confirmEmailErrorTitle')}</CardTitle>
                             <CardDescription>
-                                {error || "Ссылка подтверждения недействительна или срок ее действия истек."}
+                                {error || t('confirmEmailErrorDesc')}
                             </CardDescription>
                             <div className="flex gap-2">
-                                <Button variant="outline" onClick={() => router.push("/auth")}>
-                                    Назад к входу
-                                </Button>
+                                <Button variant="outline" onClick={() => router.push("/auth")}>{t('confirmEmailErrorBack')}</Button>
                                 {email && (
-                                    <Button onClick={() => setStatus("idle")}>
-                                        Запросить новую ссылку
-                                    </Button>
+                                    <Button onClick={() => setStatus("idle")}>{t('confirmEmailErrorRequest')}</Button>
                                 )}
                             </div>
                         </div>
@@ -186,17 +178,16 @@ function ConfirmEmailContent() {
             return (
                 <div className="flex flex-col items-center gap-4 text-center">
                     <Mail className="size-12 text-primary" />
-                    <CardTitle>Подтвердите ваш Email</CardTitle>
+                    <CardTitle>{t('confirmEmailSentTitle')}</CardTitle>
                     <CardDescription>
-                        Мы отправили ссылку подтверждения на <strong>{email || "ваш адрес электронной почты"}</strong>.
-                        Пожалуйста, проверьте свою почту и перейдите по ссылке для завершения регистрации.
+                        {t('confirmEmailSentDesc').replace('{email}', email || t('email'))}
                     </CardDescription>
                     <Button onClick={handleResend} disabled={resendCooldown > 0 || isLoading} className="w-full">
                         {isLoading
-                            ? "Отправляем..."
+                            ? t('confirmEmailSentSending')
                             : resendCooldown > 0
-                                ? `Повторить через ${resendCooldown}с`
-                                : "Отправить письмо повторно"}
+                                ? t('confirmEmailSentResendWait').replace('{seconds}', resendCooldown.toString())
+                                : t('confirmEmailSentButton')}
                     </Button>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                 </div>

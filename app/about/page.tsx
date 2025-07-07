@@ -5,10 +5,22 @@ import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { User, Mic, Globe, Shield, Zap, Users, TrendingUp, CheckCircle } from "lucide-react"
 import { useTheme } from "next-themes"
+import { Button } from "@/components/ui/button"
+import { Sun, Moon } from "lucide-react"
+import { UserMenu } from "@/components/user-menu"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLanguage } from "@/hooks/use-language"
+import { useTranslations } from "@/lib/i18n"
 
 export default function AboutPage() {
-    const { theme } = useTheme();
+    const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = React.useState(false);
+    const { locale, mounted: languageMounted } = useLanguage();
+    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+    const t = useTranslations(locale);
+    const toggleTheme = () => {
+        setTheme(theme === "dark" ? "light" : "dark")
+    }
     React.useEffect(() => { setMounted(true); }, []);
 
     return (
@@ -23,6 +35,20 @@ export default function AboutPage() {
                         </div>
                         <span>Megan</span>
                     </Link>
+                    <div className="hidden md:flex gap-4 items-center">
+                        <LanguageSwitcher />
+                        <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
+                            {mounted && theme === "dark" ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
+                            <span className="sr-only">{t('toggleTheme')}</span>
+                        </Button>
+                        <UserMenu />
+                    </div>
+                    <div className="flex items-center gap-4 md:hidden">
+                        <LanguageSwitcher />
+                        <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
+                            {mounted && theme === "dark" ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
+                        </Button>
+                    </div>
                 </div>
             </header>
             <main className="flex-1 flex flex-col items-center justify-center p-4">
@@ -33,15 +59,15 @@ export default function AboutPage() {
                     className="w-full max-w-3xl"
                 >
                     <section className="mb-12 text-center">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">About Megan</h1>
-                        <p className="text-lg md:text-xl text-muted-foreground mb-2">Your intelligent voice assistant for the browser</p>
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">{t('aboutTitle')}</h1>
+                        <p className="text-lg md:text-xl text-muted-foreground mb-2">{t('aboutSubtitle')}</p>
                     </section>
 
                     <section className="mb-12">
                         <Card className="border-none shadow-none bg-gradient-to-br from-primary/10 to-muted/0">
                             <CardContent className="p-8 md:p-12 flex flex-col items-center">
-                                <h2 className="text-2xl font-bold mb-2 text-center">Our Mission</h2>
-                                <p className="text-center text-muted-foreground text-lg">Empowering users to navigate, control, and utilize the web with speed and clarity through AI-powered voice assistance.</p>
+                                <h2 className="text-2xl font-bold mb-2 text-center">{t('aboutMissionTitle')}</h2>
+                                <p className="text-center text-muted-foreground text-lg">{t('aboutMissionText')}</p>
                             </CardContent>
                         </Card>
                     </section>
@@ -51,22 +77,22 @@ export default function AboutPage() {
                             <div className="flex flex-col items-center">
                                 <Users className="size-8 text-primary mb-2" />
                                 <span className="text-2xl font-bold">15K+</span>
-                                <span className="text-muted-foreground text-sm">Early Adopters</span>
+                                <span className="text-muted-foreground text-sm">{t('aboutStatsUsers')}</span>
                             </div>
                             <div className="flex flex-col items-center">
                                 <Mic className="size-8 text-primary mb-2" />
                                 <span className="text-2xl font-bold">120K+</span>
-                                <span className="text-muted-foreground text-sm">Voice Commands Executed</span>
+                                <span className="text-muted-foreground text-sm">{t('aboutStatsVoice')}</span>
                             </div>
                             <div className="flex flex-col items-center">
                                 <Zap className="size-8 text-primary mb-2" />
                                 <span className="text-2xl font-bold">80K+</span>
-                                <span className="text-muted-foreground text-sm">Web Tasks Automated</span>
+                                <span className="text-muted-foreground text-sm">{t('aboutStatsTasks')}</span>
                             </div>
                             <div className="flex flex-col items-center">
                                 <CheckCircle className="size-8 text-primary mb-2" />
                                 <span className="text-2xl font-bold">99.98%</span>
-                                <span className="text-muted-foreground text-sm">Uptime</span>
+                                <span className="text-muted-foreground text-sm">{t('aboutStatsUptime')}</span>
                             </div>
                         </div>
                     </section>
@@ -74,69 +100,68 @@ export default function AboutPage() {
                     <section className="mb-12">
                         <Card className="border-none shadow-none bg-gradient-to-br from-secondary/10 to-muted/0">
                             <CardContent className="p-8 md:p-12">
-                                <h2 className="text-2xl font-bold mb-2 text-center">Our Story</h2>
-                                <p className="text-center text-muted-foreground text-lg mb-4">Megan was created to solve a growing problem — the complexity of modern browsing.<br />While working online, we noticed how much time is lost switching tabs, managing tools, and searching for information. Voice assistants existed, but none were optimized for the browser.<br /><br />We decided to change that.<br /><br />Megan combines cutting-edge voice recognition with real AI capabilities to help you take notes, control media, translate content, summarize articles, and manage tabs — all by voice.<br />It's your browser, finally under your control.</p>
+                                <h2 className="text-2xl font-bold mb-2 text-center">{t('aboutStoryTitle')}</h2>
+                                <p className="text-center text-muted-foreground text-lg mb-4" style={{ whiteSpace: 'pre-line' }}>{t('aboutStoryText')}</p>
                             </CardContent>
                         </Card>
                     </section>
 
                     <section className="mb-12">
-                        <h2 className="text-2xl font-bold mb-6 text-center">Our Principles</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-center">{t('aboutPrinciplesTitle')}</h2>
                         <div className="grid md:grid-cols-2 gap-8">
                             <Card className="bg-gradient-to-br from-primary/5 to-muted/0 border-none">
                                 <CardContent className="p-6 flex flex-col items-center">
                                     <Mic className="size-7 text-primary mb-2" />
-                                    <h3 className="font-semibold mb-1">Voice-First Experience</h3>
-                                    <p className="text-center text-muted-foreground">We believe the browser should listen. Megan is built around fast, natural voice commands that work the way you think.</p>
+                                    <h3 className="font-semibold mb-1">{t('aboutPrinciple1Title')}</h3>
+                                    <p className="text-center text-muted-foreground">{t('aboutPrinciple1Text')}</p>
                                 </CardContent>
                             </Card>
                             <Card className="bg-gradient-to-br from-primary/5 to-muted/0 border-none">
                                 <CardContent className="p-6 flex flex-col items-center">
                                     <Globe className="size-7 text-primary mb-2" />
-                                    <h3 className="font-semibold mb-1">AI with Purpose</h3>
-                                    <p className="text-center text-muted-foreground">Every feature exists to streamline your work — not distract from it. Megan simplifies the web, doesn't complicate it.</p>
+                                    <h3 className="font-semibold mb-1">{t('aboutPrinciple2Title')}</h3>
+                                    <p className="text-center text-muted-foreground">{t('aboutPrinciple2Text')}</p>
                                 </CardContent>
                             </Card>
                             <Card className="bg-gradient-to-br from-primary/5 to-muted/0 border-none">
                                 <CardContent className="p-6 flex flex-col items-center">
                                     <Shield className="size-7 text-primary mb-2" />
-                                    <h3 className="font-semibold mb-1">Privacy by Default</h3>
-                                    <p className="text-center text-muted-foreground">We don't store voice recordings. We don't track browsing history. Your data remains yours — always.</p>
+                                    <h3 className="font-semibold mb-1">{t('aboutPrinciple3Title')}</h3>
+                                    <p className="text-center text-muted-foreground">{t('aboutPrinciple3Text')}</p>
                                 </CardContent>
                             </Card>
                             <Card className="bg-gradient-to-br from-primary/5 to-muted/0 border-none">
                                 <CardContent className="p-6 flex flex-col items-center">
                                     <TrendingUp className="size-7 text-primary mb-2" />
-                                    <h3 className="font-semibold mb-1">Universal Productivity</h3>
-                                    <p className="text-center text-muted-foreground">From students to professionals, Megan is designed to serve anyone who wants to do more in less time, without complexity.</p>
+                                    <h3 className="font-semibold mb-1">{t('aboutPrinciple4Title')}</h3>
+                                    <p className="text-center text-muted-foreground">{t('aboutPrinciple4Text')}</p>
                                 </CardContent>
                             </Card>
                         </div>
                     </section>
 
                     <section className="mb-12 flex flex-col items-center">
-                        <h2 className="text-2xl font-bold mb-4 text-center">Meet the Creator</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-center">{t('aboutCreatorTitle')}</h2>
                         <div className="flex flex-col md:flex-row items-center gap-6">
                             <div className="flex flex-col items-center">
                                 <User className="size-16 text-primary mb-2" />
-                                <span className="text-lg font-semibold">Omar Sembek</span>
-                                <span className="text-muted-foreground text-sm">Founder & Lead Developer</span>
+                                <span className="text-lg font-semibold">{t('aboutCreatorName')}</span>
+                                <span className="text-muted-foreground text-sm">{t('aboutCreatorRole')}</span>
                             </div>
                             <div className="max-w-md text-center md:text-left text-muted-foreground">
-                                <p>A developer passionate about AI, voice technology, and making tools that actually help. Megan is the result of months of work to bring browser control to the next level.</p>
+                                <p>{t('aboutCreatorBio')}</p>
                             </div>
                         </div>
                     </section>
 
                     <section className="mb-12">
-                        <h2 className="text-2xl font-bold mb-4 text-center">Contact Us</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-center">{t('aboutContactTitle')}</h2>
                         <div className="flex flex-col items-center gap-2">
-                            <span>General inquiries / support</span>
-                            <a href="mailto:support@yourmegan.me" className="text-primary underline text-lg font-medium">support@yourmegan.me</a>
+                            <span>{t('aboutContactGeneral')}</span>
+                            <a href="mailto:support@yourmegan.me" className="text-primary underline text-lg font-medium">{t('aboutContactEmail')}</a>
                             <div className="flex gap-4 mt-4">
-                                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">X – News & Announcements</a>
-                                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">Instagram – Behind the Scenes</a>
-                                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">LinkedIn – Product & Development Insights</a>
+                                <a href="https://www.instagram.com/yourmegan_ai/" className="text-muted-foreground hover:text-primary transition-colors">{t('aboutContactInstagram')}</a>
+                                <a href="https://www.linkedin.com/in/omar-sembek" className="text-muted-foreground hover:text-primary transition-colors">{t('aboutContactLinkedin')}</a>
                             </div>
                         </div>
                     </section>

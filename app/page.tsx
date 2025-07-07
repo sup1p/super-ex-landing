@@ -740,14 +740,6 @@ export default function LandingPage() {
             <p className="text-xs text-muted-foreground">
               &copy; {new Date().getFullYear()} Megan. {t('allRightsReserved')}
             </p>
-            <div className="flex gap-4">
-              <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                {t('privacyPolicy')}
-              </Link>
-              <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                {t('termsOfService')}
-              </Link>
-            </div>
           </div>
         </div>
       </footer>
