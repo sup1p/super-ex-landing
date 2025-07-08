@@ -23,7 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-MLW9NKL9DC"></script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-MLW9NKL9DC"
+          strategy="afterInteractive"
+        />
         <Script id="gtag-init" strategy="afterInteractive">
           {`
     window.dataLayer = window.dataLayer || [];
