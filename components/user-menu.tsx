@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { User, LogOut } from "lucide-react"
+import { User, LogOut, Info, FileText, Shield } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -80,6 +80,18 @@ export function UserMenu() {
                 <DropdownMenuItem onClick={() => router.push('/account')} className="text-purple-600">
                     <User className="mr-2 h-4 w-4" />
                     {t('myAccount')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/about')} className="text-purple-600">
+                    <Info className="mr-2 h-4 w-4" />
+                    {t('about')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/terms')} className="text-purple-600">
+                    <FileText className="mr-2 h-4 w-4" />
+                    {t('termsOfService')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/privacy')} className="text-purple-600">
+                    <Shield className="mr-2 h-4 w-4" />
+                    {t('privacyPolicy')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout} className="text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />

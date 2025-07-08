@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { Eye, EyeOff, ArrowLeft, Mail, Lock, User } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft, Mail, Lock, User, Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,6 +18,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useLanguage } from "@/hooks/use-language"
 import { useTranslations } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { useTheme } from "next-themes"
 
 // Константа с URL бэкенда
 const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -29,6 +30,7 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
   const [authSuccess, setAuthSuccess] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -39,6 +41,15 @@ export default function AuthPage() {
   const { fetchWithAuth } = useAuth()
   const { locale } = useLanguage()
   const t = useTranslations(locale)
+  const { theme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
 
   const handleTabChange = (value: string) => {
     // Reset all states when switching tabs
@@ -262,12 +273,20 @@ export default function AuthPage() {
             <ArrowLeft className="size-4" />
             <div className="flex items-center gap-2">
               <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-                <img src="/icon.png" alt="Megan" className="size-8" />
+                {mounted && (
+                  <img src={theme === "dark" ? "/icon-black-bg.png" : "/icon-white-bg.png"} alt="Megan" className="size-8" />
+                )}
               </div>
               <span>Megan</span>
             </div>
           </Link>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher />
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
+              {mounted && theme === "dark" ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
+              <span className="sr-only">{t('toggleTheme')}</span>
+            </Button>
+          </div>
         </div>
       </header>
 

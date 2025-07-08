@@ -11,12 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { toast } from "sonner"
 import { useLanguage } from "@/hooks/use-language"
 import { useTranslations } from "@/lib/i18n"
+import { useTheme } from "next-themes"
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function ConfirmEmailPage() {
     const { locale } = useLanguage();
     const t = useTranslations(locale);
+    const { theme, setTheme } = useTheme()
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-muted/20">
             <header className="w-full border-b bg-background/95 backdrop-blur-sm">
@@ -25,7 +28,7 @@ export default function ConfirmEmailPage() {
                         <ArrowLeft className="size-4" />
                         <div className="flex items-center gap-2">
                             <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-                                <img src="/icon.png" alt="Megan" className="size-8" />
+                                <img src={theme === "light" ? "/icon-white-bg.png" : "/icon-black-bg.png"} alt="Megan" className="size-8" />
                             </div>
                             <span>Megan</span>
                         </div>
