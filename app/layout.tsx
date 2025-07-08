@@ -3,6 +3,7 @@ import "@/styles/globals.css"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 import { ThemeProvider } from "@/components/theme-provider"
+import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,6 +22,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-MLW9NKL9DC"></script>
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MLW9NKL9DC');
+  `}
+        </Script>
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
