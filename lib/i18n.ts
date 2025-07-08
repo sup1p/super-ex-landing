@@ -418,6 +418,11 @@ export const translations = {
         forgotPasswordFormButton: 'Send Link',
         forgotPasswordFormSending: 'Sending...',
         forgotPasswordFormResendWait: 'Resend in {seconds}s',
+
+        // Not Found page
+        notFoundTitle: 'Page Not Found',
+        notFoundDescription: 'Sorry, the page you are looking for does not exist or has been moved.',
+        notFoundBack: 'Back to Home',
     },
     ru: {
         // Navigation
@@ -821,6 +826,11 @@ export const translations = {
         forgotPasswordFormButton: 'Отправить ссылку',
         forgotPasswordFormSending: 'Отправляем...',
         forgotPasswordFormResendWait: 'Повторить через {seconds}с',
+
+        // Not Found page
+        notFoundTitle: 'Страница не найдена',
+        notFoundDescription: 'Извините, страница, которую вы ищете, не существует или была перемещена.',
+        notFoundBack: 'На главную',
     } as const
 }
 export type TranslationKey = keyof typeof translations.en
