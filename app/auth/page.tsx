@@ -274,7 +274,7 @@ export default function AuthPage() {
             <div className="flex items-center gap-2">
               <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
                 {mounted && (
-                  <img src={theme === "dark" ? "/icon-black-bg.png" : "/icon-white-bg.png"} alt="Megan" className="size-8" />
+                  <img src="/icon2.png" alt="Megan" className="size-8" />
                 )}
               </div>
               <span>Megan</span>

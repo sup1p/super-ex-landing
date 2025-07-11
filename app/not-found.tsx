@@ -22,7 +22,7 @@ export default function NotFound() {
             >
                 <div className="size-28 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground shadow-2xl">
                     <img
-                        src={theme === "dark" ? "/icon-black-bg.png" : "/icon-white-bg.png"}
+                        src="/icon2.png"
                         alt="Avatar"
                         className="size-28 rounded-full"
                     />

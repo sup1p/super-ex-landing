@@ -27,7 +27,8 @@ export const translations = {
         // Hero section
         heroTitle: 'Streamline Your Web Experience',
         heroSubtitle: 'Boost productivity, talk with browser, feel relaxed',
-        getStarted: 'Get Started',
+        getStarted: "Get started",
+        addToChrome: "Add to chrome - It's free",
         noCreditCard: 'No credit card',
         sevenDayTrial: '7-day trial',
         cancelAnytime: 'Cancel anytime',
@@ -436,6 +437,7 @@ export const translations = {
         heroTitle: 'Оптимизируйте Ваш Веб-Опыт',
         heroSubtitle: 'Повысьте продуктивность, общайтесь с браузером, чувствуйте себя расслабленно',
         getStarted: 'Начать',
+        addToChrome: 'Добавить в chrome - это бесплатно',
         noCreditCard: 'Без кредитной карты',
         sevenDayTrial: '7-дневный пробный период',
         cancelAnytime: 'Отменить в любое время',

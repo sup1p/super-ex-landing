@@ -28,7 +28,7 @@ export default function ConfirmEmailPage() {
                         <ArrowLeft className="size-4" />
                         <div className="flex items-center gap-2">
                             <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-                                <img src={theme === "light" ? "/icon-white-bg.png" : "/icon-black-bg.png"} alt="Megan" className="size-8" />
+                                <img src="/icon2.png" alt="Megan" className="size-8" />
                             </div>
                             <span>Megan</span>
                         </div>

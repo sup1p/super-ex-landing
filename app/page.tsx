@@ -104,7 +104,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 font-bold">
             {mounted && (
               <Image
-                src={theme === "dark" ? "/icon-black-bg.png" : "/icon-white-bg.png"}
+                src="/icon2.png"
                 alt="Megan"
                 width={32}
                 height={32}
@@ -207,9 +207,9 @@ export default function LandingPage() {
                 {t('heroSubtitle')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href={isAuth ? "/account" : "/auth"}>
+                <Link href={"https://chromewebstore.google.com/detail/Megan:%20Your%20AI%20assistant/pjlfhimkiplnokedfbefdifljllolamg?hl=en-GB&utm_source=ext_sidebar"}>
                   <Button size="lg" className="rounded-full h-12 px-8 text-base bg-gradient-to-r from-purple-600 to-purple-1200 hover:from-purple-600 hover:to-purple-700 text-white border-none">
-                    {t('getStarted')}
+                    {t('addToChrome')}
                     <ArrowRight className="ml-2 size-4" />
                   </Button>
                 </Link>
@@ -657,7 +657,7 @@ export default function LandingPage() {
               <div className="flex items-center gap-2 font-bold">
                 {mounted && (
                   <Image
-                    src={theme === "light" ? "/icon-white-bg.png" : "/icon-black-bg.png"}
+                    src="/icon2.png"
                     alt="Megan"
                     width={32}
                     height={32}

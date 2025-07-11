@@ -194,7 +194,7 @@ export default function AccountPage() {
                     >
                         <Link href="/">
                             <img
-                                src={theme === "light" ? "/icon-white-bg.png" : "/icon-black-bg.png"}
+                                src="/icon2.png"
                                 alt="Megan"
                                 className="size-10"
                             />
