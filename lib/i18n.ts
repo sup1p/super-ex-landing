@@ -386,7 +386,7 @@ export const translations = {
 
         // Confirm Email page
         confirmEmailTitle: 'Confirm your Email',
-        confirmEmailDesc: 'We have sent a confirmation link to {email}. Please check your inbox and follow the link to complete your registration.',
+        confirmEmailDesc: 'We have sent a confirmation link to {email}. Please check your inbox and follow the link to complete your registration. If you are not seeing our mail, check "spam" folder or press "resend email"',
         confirmEmailPendingTitle: 'Confirming your email...',
         confirmEmailPendingDesc: 'Please wait while we verify your token.',
         confirmEmailSuccessTitle: 'Email confirmed!',
@@ -397,7 +397,7 @@ export const translations = {
         confirmEmailErrorBack: 'Back to Login',
         confirmEmailErrorRequest: 'Request a new link',
         confirmEmailSentTitle: 'Confirm your Email',
-        confirmEmailSentDesc: 'We have sent a confirmation link to {email}. Please check your inbox and follow the link to complete your registration.',
+        confirmEmailSentDesc: 'We have sent a confirmation link to {email}. Please check your inbox and follow the link to complete your registration. If you are not seeing our mail, check "spam" folder or press "resend email"',
         confirmEmailSentButton: 'Resend Email',
         confirmEmailSentSending: 'Sending...',
         confirmEmailSentResendWait: 'Resend in {seconds}s',
@@ -424,6 +424,21 @@ export const translations = {
         notFoundTitle: 'Page Not Found',
         notFoundDescription: 'Sorry, the page you are looking for does not exist or has been moved.',
         notFoundBack: 'Back to Home',
+
+        // Tutorial page
+        tutorialTitle: 'Tutorial',
+        tutorialSubtitle: 'Learn about the Sidebar and Context Window features below.',
+        tutorialSidebar: 'Sidebar',
+        tutorialContextWindow: 'Context Window',
+        tutorialNotes: 'Notes',
+        tutorialChat: 'Chat',
+        tutorialVoice: 'Voice',
+        tutorialTranslate: 'Translate',
+        tutorialTools: 'Tools',
+        tutorialSettings: 'Settings',
+        tutorialMeganVoice: 'Megan Voice',
+        tutorialSave: 'Save',
+        tutorialSummarize: 'Summarize',
     },
     ru: {
         // Navigation
@@ -806,7 +821,7 @@ export const translations = {
         confirmEmailErrorBack: 'Назад к входу',
         confirmEmailErrorRequest: 'Запросить новую ссылку',
         confirmEmailSentTitle: 'Подтвердите ваш Email',
-        confirmEmailSentDesc: 'Мы отправили ссылку подтверждения на {email}. Пожалуйста, проверьте почту и перейдите по ссылке для завершения регистрации.',
+        confirmEmailSentDesc: 'Мы отправили ссылку подтверждения на {email}. Пожалуйста, проверьте почту и перейдите по ссылке для завершения регистрации. Если вы не видите письмо то проверьте папку "спам" или перетоправьте email',
         confirmEmailSentButton: 'Отправить письмо повторно',
         confirmEmailSentSending: 'Отправляем...',
         confirmEmailSentResendWait: 'Повторить через {seconds}с',
@@ -833,6 +848,21 @@ export const translations = {
         notFoundTitle: 'Страница не найдена',
         notFoundDescription: 'Извините, страница, которую вы ищете, не существует или была перемещена.',
         notFoundBack: 'На главную',
+
+        // Tutorial page
+        tutorialTitle: 'Обучение',
+        tutorialSubtitle: 'Изучите функции Sidebar и Context Window ниже.',
+        tutorialSidebar: 'Боковая панель',
+        tutorialContextWindow: 'Контекстное окно',
+        tutorialNotes: 'Заметки',
+        tutorialChat: 'Чат',
+        tutorialVoice: 'Голос',
+        tutorialTranslate: 'Перевод',
+        tutorialTools: 'Инструменты',
+        tutorialSettings: 'Настройки',
+        tutorialMeganVoice: 'Голос Megan',
+        tutorialSave: 'Сохранить',
+        tutorialSummarize: 'Суммаризация',
     } as const
 }
 export type TranslationKey = keyof typeof translations.en
