@@ -139,6 +139,12 @@ export default function LandingPage() {
             >
               {t('faq')}
             </Link>
+            <Link
+              href="/tutorial"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Tutorial
+            </Link>
           </nav>
           <div className="hidden md:flex gap-4 items-center">
             <LanguageSwitcher />
@@ -179,6 +185,9 @@ export default function LandingPage() {
               </Link>
               <Link href="#faq" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
                 {t('faq')}
+              </Link>
+              <Link href="/tutorial" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
+                Tutorial
               </Link>
               <div className="flex flex-col gap-2 pt-2 border-t">
                 <UserMenu />
@@ -711,6 +720,15 @@ export default function LandingPage() {
                 <li>
                   <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
                     {t('support')}
+                  </Link>
+
+                </li>
+                <li>
+                  <Link
+                    href="/tutorial"
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Tutorial
                   </Link>
                 </li>
               </ul>
