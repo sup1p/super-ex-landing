@@ -145,6 +145,14 @@ export default function LandingPage() {
             >
               Tutorial
             </Link>
+            <Link
+              href="https://drive.google.com/file/d/1qbTnP5XjbHcOyau_qMFrddGXOVA5lOKM/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium bg-gradient-to-r from-yellow-500 to-yellow-600 bg-clip-text text-transparent animate-pulse hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 hover:scale-105"
+            >
+              CV of Author
+            </Link>
           </nav>
           <div className="hidden md:flex gap-4 items-center">
             <LanguageSwitcher />
@@ -188,6 +196,15 @@ export default function LandingPage() {
               </Link>
               <Link href="/tutorial" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
                 Tutorial
+              </Link>
+              <Link
+                href="https://drive.google.com/file/d/1qbTnP5XjbHcOyau_qMFrddGXOVA5lOKM/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2 text-sm font-medium bg-gradient-to-r from-yellow-500 to-yellow-600 bg-clip-text text-transparent animate-pulse hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 hover:scale-105"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                CV of Author
               </Link>
               <div className="flex flex-col gap-2 pt-2 border-t">
                 <UserMenu />
