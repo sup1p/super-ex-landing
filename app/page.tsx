@@ -249,7 +249,6 @@ export default function LandingPage() {
                 <div className="p-1 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-1200 transition-colors hover:from-purple-600 hover:to-purple-700">
                   <video
                     src="/gifex.mp4"
-                    controls
                     autoPlay
                     loop
                     muted
