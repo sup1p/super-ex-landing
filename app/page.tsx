@@ -252,6 +252,7 @@ export default function LandingPage() {
                     autoPlay
                     loop
                     muted
+                    playsInline
                     className="w-full h-auto rounded-xl bg-background"
                   />
                 </div>
